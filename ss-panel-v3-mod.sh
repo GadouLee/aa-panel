@@ -4,16 +4,16 @@
 install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
-	yum update -y nss curl libcurl 
+	yum update -y nss curl libcurl
 	num=$1
 	if [ "${num}" != "1" ]; then
-  	  wget -c --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
+  	  wget -c --no-check-certificate https://github.com/GadouLee/aa-panel/raw/master/lnmp1.4.zip && unzip lnmp1.4.zip && rm -rf lnmp1.4.zip && cd lnmp1.4 && chmod +x install.sh && ./install.sh lnmp
 	fi
 	cd /home/wwwroot/
 	cp -r default/phpmyadmin/ .
 	cd default
 	rm -rf index.html
-	git clone https://github.com/mmmwhy/mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/GadouLee/aa-ui.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
 	chattr -i .user.ini
 	mv .user.ini public
@@ -21,12 +21,12 @@ install_ss_panel_mod_v3(){
 	chmod -R 777 *
 	chown -R www:www storage
 	chattr +i public/.user.ini
-	wget -N -P  /usr/local/nginx/conf/ --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/nginx.conf
+	wget -N -P  /usr/local/nginx/conf/ --no-check-certificate https://raw.githubusercontent.com/GadouLee/aa-panel/master/nginx.conf
 	service nginx restart
 	IPAddress=`wget http://whatismyip.akamai.com/ -O - -q ; echo`;
 	sed -i "s#103.74.192.11#${IPAddress}#" /home/wwwroot/default/sql/sspanel.sql
-	mysql -uroot -proot -e"create database sspanel;" 
-	mysql -uroot -proot -e"use sspanel;" 
+	mysql -uroot -proot -e"create database sspanel;"
+	mysql -uroot -proot -e"use sspanel;"
 	mysql -uroot -proot sspanel < /home/wwwroot/default/sql/sspanel.sql
 	cd /home/wwwroot/default
 	php -n xcat initdownload
@@ -51,11 +51,11 @@ Libtest(){
 	echo "$LIB_PING $LIB" >> ping.pl
 	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 	if [ "$libAddr" == "$GIT" ];then
-		libAddr='https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/libsodium-1.0.13.tar.gz'
+		libAddr='https://github.com/GadouLee/aa-panel/raw/master/libsodium-1.0.13.tar.gz'
 	else
 		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
 	fi
-	rm -f ping.pl		
+	rm -f ping.pl
 }
 Get_Dist_Version()
 {
@@ -70,7 +70,7 @@ python_test(){
 	tsinghua='pypi.tuna.tsinghua.edu.cn'
 	pypi='mirror-ord.pypi.io'
 	doubanio='pypi.doubanio.com'
-	pubyun='pypi.pubyun.com'	
+	pubyun='pypi.pubyun.com'
 	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $8}'|sed "s/time=//"`
 	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $8}'|sed "s/time=//"`
 	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $8}'|sed "s/time=//"`
@@ -95,24 +95,24 @@ install_centos_ssr(){
 	cd /root
 	Get_Dist_Version
 	if [ $Version == "7" ]; then
-		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
-		rpm -ivh epel-release-latest-7.noarch.rpm	
+		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+		rpm -ivh epel-release-latest-7.noarch.rpm
 	else
 		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 		rpm -ivh epel-release-latest-6.noarch.rpm
 	fi
 	rm -rf *.rpm
-	yum -y update --exclude=kernel*	
+	yum -y update --exclude=kernel*
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel iptables
-	yum -y update nss curl libcurl 
-	yum -y groupinstall "Development Tools" 
+	yum -y update nss curl libcurl
+	yum -y groupinstall "Development Tools"
 	#第一次yum安装 supervisor pip
 	yum -y install supervisor python-pip
 	supervisord
 	#第二次pip supervisor是否安装成功
 	if [ -z "`pip`" ]; then
     curl -O https://bootstrap.pypa.io/get-pip.py
-		python get-pip.py 
+		python get-pip.py
 		rm -rf *.py
 	fi
 	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
@@ -124,7 +124,7 @@ install_centos_ssr(){
 		if [ -z "`easy_install`"]; then
     wget http://peak.telecommunity.com/dist/ez_setup.py
 		python ez_setup.py
-		fi		
+		fi
 		easy_install pip
 	fi
 	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
@@ -138,12 +138,12 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
+	git clone -b manyuser https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
 	cd /root/shadowsocks
 	chkconfig supervisord on
 	#第一次安装
 	python_test
-	pip install -r requirements.txt -i $pyAddr	
+	pip install -r requirements.txt -i $pyAddr
 	#第二次检测是否安装成功
 	if [ -z "`python -c 'import requests;print(requests)'`" ]; then
 		pip install -r requirements.txt #用自带的源试试再装一遍
@@ -164,7 +164,7 @@ install_centos_ssr(){
 		git clone https://github.com/etingof/pyasn1.git && cd pyasn1
 		python setup.py install && cd ..
 		rm -rf python
-	fi	
+	fi
 	systemctl stop firewalld.service
 	systemctl disable firewalld.service
 	cd /root/shadowsocks
@@ -185,7 +185,7 @@ install_ubuntu_ssr(){
 	apt-get install python-pip git -y
 	pip install cymysql
 	cd /root
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
+	git clone -b manyuser https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
 	cd shadowsocks
 	pip install -r requirements.txt
 	chmod +x *.sh
@@ -248,12 +248,12 @@ install_node(){
 	sed -i "2a\NODE_ID = ${UserNODE_ID}" /root/shadowsocks/userapiconfig.py
 	# 启用supervisord
 	supervisorctl shutdown
-	#某些机器没有echo_supervisord_conf 
-	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/supervisord.conf
+	#某些机器没有echo_supervisord_conf
+	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/GadouLee/aa-panel/master/supervisord.conf
 	supervisord
 	#iptables
 	iptables -F
-	iptables -X  
+	iptables -X
 	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
 	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
 	iptables-save >/etc/sysconfig/iptables
@@ -308,9 +308,9 @@ install_node_db(){
 	# 取消文件数量限制
 	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
 	read -p "Please input your MYSQL_HOST: " MYSQL_HOST
-	read -p "Please input your MYSQL_DB: " MYSQL_DB 
-	read -p "Please input your MYSQL_USER: " MYSQL_USER 
-	read -p "Please input your MYSQL_PASS: " MYSQL_PASS 
+	read -p "Please input your MYSQL_DB: " MYSQL_DB
+	read -p "Please input your MYSQL_USER: " MYSQL_USER
+	read -p "Please input your MYSQL_PASS: " MYSQL_PASS
 	read -p "Please input your Node_ID(like:1): " UserNODE_ID
 	install_ssr_for_each
 	cd /root/shadowsocks
@@ -330,12 +330,12 @@ install_node_db(){
 	sed -i "2a\NODE_ID = ${UserNODE_ID}" /root/shadowsocks/userapiconfig.py
 	# 启用supervisord
 	supervisorctl shutdown
-	#某些机器没有echo_supervisord_conf 
+	#某些机器没有echo_supervisord_conf
 	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/supervisord.conf
 	supervisord
 	#iptables
 	iptables -F
-	iptables -X  
+	iptables -X
 	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
 	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
 	iptables-save >/etc/sysconfig/iptables
@@ -365,7 +365,7 @@ install_panel_and_node(){
 	systemctl disable firewalld.service
 	yum install iptables -y
 	iptables -F
-	iptables -X  
+	iptables -X
 	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
 	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
 	iptables-save >/etc/sysconfig/iptables
