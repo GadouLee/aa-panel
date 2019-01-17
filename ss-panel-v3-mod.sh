@@ -13,7 +13,7 @@ install_ss_panel_mod_v3(){
 	cp -r default/phpmyadmin/ .
 	cd default
 	rm -rf index.html
-	git clone https://github.com/mmmwhy/mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/GadouLee/aa-ui.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
 	chattr -i .user.ini
 	mv .user.ini public
@@ -138,7 +138,7 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	git clone -b manyuser https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
+	git clone -b master https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
 	cd /root/shadowsocks
 	chkconfig supervisord on
 	#第一次安装
@@ -185,7 +185,7 @@ install_ubuntu_ssr(){
 	apt-get install python-pip git -y
 	pip install cymysql
 	cd /root
-	git clone -b manyuser https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
+	git clone -b master https://github.com/GadouLee/aa-shadowsocks.git "/root/shadowsocks"
 	cd shadowsocks
 	pip install -r requirements.txt
 	chmod +x *.sh
