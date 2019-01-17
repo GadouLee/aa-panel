@@ -13,7 +13,8 @@ install_ss_panel_mod_v3(){
 	cp -r default/phpmyadmin/ .
 	cd default
 	rm -rf index.html
-	git clone https://github.com/GadouLee/aa-ui.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/mmmwhy/mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	#git clone https://github.com/GadouLee/aa-ui.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
 	chattr -i .user.ini
 	mv .user.ini public
